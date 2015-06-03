@@ -1,0 +1,12 @@
+C:\DEV\HN.Wow\packages\EntityFramework.7.0.0-beta4\readme.html
+
+EF7 is currently pre-release. The API surface is still changing and there are limitations, bugs, and performance bottlenecks. 
+
+EF7 includes significant API changes. We still have the DbContex/DbSet API but under the covers they are built over brand new components with significant API differences. 
+Some basic O/RM features are not yet implemented (such as lazy loading and inheritance mapping). We won't be recommending EF7 as a general alternative to EF6.x until these features have been added. 
+EF7 only supports code-based modelling. The EDMX file format and the EF Designer are being retired in EF7. Of course, you can still use EF7 to target an existing database and we're currently working on reverse engineer tooling. 
+There are limited database providers available for EF7. We currently have an MS SQL Server provider and an in-memory provider that can be used for testing. We've also done some work on SQLite, Azure Table Storage, and Redis providers but they are not available yet. 
+Not all platforms are supported yet. EF7 can currently be used in ASP.NET 5 projects and applications that target the full .NET Framework (WPF, WinForms, ASP.NET, etc.). Windows Phone, Windows Store, and other platforms will be enabled later. 
+
+
+https://github.com/aspnet/EntityFramework/wiki/What-is-EF7-all-about

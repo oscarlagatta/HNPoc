@@ -1,0 +1,9 @@
+ProductId	int	Unchecked
+ProductName	nvarchar(100)	Checked
+IntroductionDate	datetime	Checked
+Cost	decimal(18, 2)	Checked
+Price	decimal(18, 2)	Checked
+AccountId	int	Checked
+Stock	int	Checked
+IsDiscontinued	bit	Checked
+		Unchecked

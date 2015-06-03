@@ -1,0 +1,83 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.22823.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resoruce Access", "Resoruce Access", "{5246CA03-5D9E-4AAE-9510-A28CB67FB0C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business", "Business", "{E5C80AD9-B2A1-43CF-BDCF-F7819CB3FA19}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{88982DE0-7751-46ED-B94A-7A6B4D3692A1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{2EA8A04F-DA87-4C05-8F9F-B7EFBB850B83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Common", "Core.Common\Core.Common.csproj", "{2BFAD494-395E-46A8-97B8-A702AD6BE3EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Common.Contracts", "Core.Common.Contracts\Core.Common.Contracts.csproj", "{AE09E1FB-8D97-4CD5-AD6D-5CA8453D5F2E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{7B373437-D20E-46A3-88EC-739D3DFA6001}"
+	ProjectSection(SolutionItems) = preProject
+		EntityFramework7.txt = EntityFramework7.txt
+		Tables.txt = Tables.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HN.Wow.Data.Contracts", "HN.Wow.Data.Contracts\HN.Wow.Data.Contracts.csproj", "{D31176B1-E995-4B1C-AC21-21304D4266AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HN.Wow.Business.Entities", "HN.Wow.Business.Entities\HN.Wow.Business.Entities.csproj", "{3916ADAC-315E-4F26-BC22-E03ECC8E11FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HN.Wow.Data", "HN.Wow.Data\HN.Wow.Data.csproj", "{4E48B9C1-5D8D-423F-B99C-4217C2F16007}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FDA970DE-2D2D-4D68-A0FB-BC6A78E33E61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HN.Wow.Data.Tests", "HN.Wow.Data.Tests\HN.Wow.Data.Tests.csproj", "{A7BB2422-3549-4957-A3BD-6B83BC4C26F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HN.Wow.Business.Bootstrapper", "HN.Wow.Business.Bootstrapper\HN.Wow.Business.Bootstrapper.csproj", "{1153EA6D-3522-40C0-924C-FF2FF58CD009}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2BFAD494-395E-46A8-97B8-A702AD6BE3EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BFAD494-395E-46A8-97B8-A702AD6BE3EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BFAD494-395E-46A8-97B8-A702AD6BE3EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BFAD494-395E-46A8-97B8-A702AD6BE3EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE09E1FB-8D97-4CD5-AD6D-5CA8453D5F2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE09E1FB-8D97-4CD5-AD6D-5CA8453D5F2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE09E1FB-8D97-4CD5-AD6D-5CA8453D5F2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE09E1FB-8D97-4CD5-AD6D-5CA8453D5F2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D31176B1-E995-4B1C-AC21-21304D4266AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D31176B1-E995-4B1C-AC21-21304D4266AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D31176B1-E995-4B1C-AC21-21304D4266AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D31176B1-E995-4B1C-AC21-21304D4266AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3916ADAC-315E-4F26-BC22-E03ECC8E11FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3916ADAC-315E-4F26-BC22-E03ECC8E11FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3916ADAC-315E-4F26-BC22-E03ECC8E11FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3916ADAC-315E-4F26-BC22-E03ECC8E11FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E48B9C1-5D8D-423F-B99C-4217C2F16007}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E48B9C1-5D8D-423F-B99C-4217C2F16007}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E48B9C1-5D8D-423F-B99C-4217C2F16007}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E48B9C1-5D8D-423F-B99C-4217C2F16007}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7BB2422-3549-4957-A3BD-6B83BC4C26F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7BB2422-3549-4957-A3BD-6B83BC4C26F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7BB2422-3549-4957-A3BD-6B83BC4C26F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7BB2422-3549-4957-A3BD-6B83BC4C26F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1153EA6D-3522-40C0-924C-FF2FF58CD009}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1153EA6D-3522-40C0-924C-FF2FF58CD009}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1153EA6D-3522-40C0-924C-FF2FF58CD009}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1153EA6D-3522-40C0-924C-FF2FF58CD009}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2BFAD494-395E-46A8-97B8-A702AD6BE3EF} = {88982DE0-7751-46ED-B94A-7A6B4D3692A1}
+		{AE09E1FB-8D97-4CD5-AD6D-5CA8453D5F2E} = {88982DE0-7751-46ED-B94A-7A6B4D3692A1}
+		{D31176B1-E995-4B1C-AC21-21304D4266AB} = {5246CA03-5D9E-4AAE-9510-A28CB67FB0C7}
+		{3916ADAC-315E-4F26-BC22-E03ECC8E11FB} = {E5C80AD9-B2A1-43CF-BDCF-F7819CB3FA19}
+		{4E48B9C1-5D8D-423F-B99C-4217C2F16007} = {5246CA03-5D9E-4AAE-9510-A28CB67FB0C7}
+		{A7BB2422-3549-4957-A3BD-6B83BC4C26F7} = {FDA970DE-2D2D-4D68-A0FB-BC6A78E33E61}
+		{1153EA6D-3522-40C0-924C-FF2FF58CD009} = {E5C80AD9-B2A1-43CF-BDCF-F7819CB3FA19}
+	EndGlobalSection
+EndGlobal
