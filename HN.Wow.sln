@@ -17,6 +17,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Common.Contracts", "Co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{7B373437-D20E-46A3-88EC-739D3DFA6001}"
 	ProjectSection(SolutionItems) = preProject
+		AppDesign.jpg = AppDesign.jpg
+		AppDesign2.jpg = AppDesign2.jpg
+		AppDesign3.jpg = AppDesign3.jpg
 		Database.txt = Database.txt
 		EntityFramework6.txt = EntityFramework6.txt
 		EntityFramework7.txt = EntityFramework7.txt
