@@ -1,0 +1,97 @@
+﻿╔═════════════════╗
+║ Database access ║
+╚═════════════════╝
+
+The entities will be on the client side and on the server side. 
+
+These two sets of entities do not cross over but each is a counterpart of the other. 
+
+Each set of entities can travel up and down the layers on its side of the wire, avoiding the need to have multiple set of classes, 
+and most important the need of use for a mapper to copy data between them. 
+
+In "most cases", a business entity will be serialized by a service, and sent across the wire, where it will be received and 
+deserialized into a counterpart client entity by a service proxy. 
+
+The same process will apply when going from the proxy to the service. 
+
+In "Most cases" because if we have the situation where the data we need to pass across does not fit a particular entity, 
+or consist of more than one combined set of entities, you'll supply a custome data contract for both sides of the wire.
+
+Each set of entities will contain different code and have its own set of functionality. In fact, the only thing that this
+entities have in common is their equivalency. This means that the naming of the counterpart entites, and their 
+properties must match for the purposes of serialization and deserialization. 
+
+Since the DataContractSerializer will be the one that WCF uses by default, the namespace for the entities must also 
+match. (TO SHOW YOU)
+
+We have two projects, one for the Business entities HN.Wow.Business.Entities and one for the client entities HN.Wow.Client.Entities. 
+
+In terms of dependencies are quite simple:
+
+a) The business entities (HN.Wow.Business.Entities) is just a regular class library project and
+   doesn't have anything additional but the common libraries, 
+   and the client entities (HN.Wow.Client.Entities) are the same with ONE exception. 
+   The exception is one NuGet package, the FluentValidation package to perform validation rules. 
+
+b) This Proof of Concept example provides a Product entity that will correspond with the Product Table in the database, 
+   It's a simple database that currently will match the entities; but that doesn't have to be the case.
+   In fact, Entity Framework has some strong ORM functionality that lets you do object relational mapping in case 
+   the entity model does not match the database, so there's no rule that says it has to. 
+   But since we are designing the system from scratch and we want to keep things simple, 
+   it happens the entities will match the databse tables.
+
+The HOW TO Process
+------------------
+
+1.- Create the client side entity.
+2.- Create the business side entity (same properties).
+3.- Fix the problem with the namespace; this is important because they'll be used by WCF for serializaiton and 
+	deserialization. And for that to work the namespaces has to match. Generally you'll do that in the 
+	DataContract attribute with a namespace property. 
+
+	NOTE: The business entities are going to be a lot lighter weight than the client ones.
+
+4.- Decorate the business entities with the DataContract attribute which comes from the System.Runtime.Serialization 
+    assembly (reference added)
+5.- Decorate the properties with DataMemeber attribute
+
+	Note: the rules of the DataContractSerializer state that if a class is decorated with DataContract, then any 
+	      member that you want to opt in for serialization must also be decorated with the corresponding DataMemeber
+	      attribute. As of a later version of WCF, or should I say later version of the DataContractSerializer they 
+	      changed those rules where you could now leave off the DataContract attibute, and automatically all public
+	      member of the class will be considered data members. 
+		  This rule has good and bad points. Bad because you might want to be explicit, meaining you'd like to see 
+		  what a class is up to, which means by looking the class and seeing that is decorated properly. 
+		  But at the same time if you have a class where the code starts to get a log heavier, 
+		  and the class does a lot more things; we might tend to find that these attribute pollute visaully the class.
+	      Attributes are beign used only on the Business entity, NOT on the client side entities.
+
+6.- The entity on the client side will have different style when declaring the properties; use shortcut notation on 
+    the business side; but long notation on the client side. The reason being is because the business entities will 
+	be a lot simpler. Will only carry data along the business side of the wire, all the way from starting in the 
+	data access layer, upt to the service layer, and anything in between. It needs NO additional functionality 
+	excepts to serve as a carrier of data, or a data transfer object if you will.
+
+	Whereas the client side entity will have more functionality that'll be added. It may possibly used in binding
+	scenarios on the web, or binding scenarios on the other CLient technology selected. (e.g. XAML WPF in which case
+	it would require some kind of property changed notification; it might also require validation rules in some
+	cases) because this is the entity that the client user interface is going to be interacting with. 
+	
+	╔═══════════════════════════════════════════════════════════════════════════════════════════════╗
+	║ REMEMEBER: this two entities must be equivalent; meaning the naming and properties must match.║
+	╚═══════════════════════════════════════════════════════════════════════════════════════════════╝
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
