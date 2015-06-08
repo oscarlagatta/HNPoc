@@ -5,13 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-using System.Runtime.Serialization;
-
-[assembly: AssemblyTitle("HN.Wow.Business.Entities")]
+[assembly: AssemblyTitle("HN.Wow.Common")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("HN.Wow.Business.Entities")]
+[assembly: AssemblyProduct("HN.Wow.Common")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -22,7 +20,7 @@ using System.Runtime.Serialization;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("3916adac-315e-4f26-bc22-e03ecc8e11fb")]
+[assembly: Guid("11850c61-1118-4656-965d-d036b70a6e4a")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -36,7 +34,3 @@ using System.Runtime.Serialization;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-
-[assembly: ContractNamespace("http://www.poc.com/HN/Wow",
-                              ClrNamespace = "HN.Wow.Business.Entities")]

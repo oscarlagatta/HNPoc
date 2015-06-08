@@ -7,11 +7,11 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 using System.Runtime.Serialization;
 
-[assembly: AssemblyTitle("HN.Wow.Business.Entities")]
+[assembly: AssemblyTitle("HN.Wow.Client.Entities")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("HN.Wow.Business.Entities")]
+[assembly: AssemblyProduct("HN.Wow.Client.Entities")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -22,7 +22,7 @@ using System.Runtime.Serialization;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("3916adac-315e-4f26-bc22-e03ecc8e11fb")]
+[assembly: Guid("1aaedd27-12a8-4dc2-97db-05096a1931fc")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -37,6 +37,5 @@ using System.Runtime.Serialization;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-
-[assembly: ContractNamespace("http://www.poc.com/HN/Wow",
-                              ClrNamespace = "HN.Wow.Business.Entities")]
+[assembly: ContractNamespace("http://poc/HN/Wow",
+                              ClrNamespace = "HN.Wow.Client.Entities")]
