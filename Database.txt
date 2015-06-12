@@ -1,6 +1,375 @@
 ﻿╔═════════════════╗
 ║ Database access ║
 ╚═════════════════╝
+╔════════════════════════════════╗
+║ Overview of a data repository  ║
+╚════════════════════════════════╝
+
+The data repository patterns in place for this application are designed to make it simple to write data repositories, 
+and also simple to extend current repositories as needs grow. 
+
+The idea is that there will be one data repository per table, and using LINQ to Entities inside the methods of these repository classes; 
+perhaps also using lambda expression could work too.
+
+The idea is to establish a pattern for doing standard CRUD, and then also make the pattern extensible for additional functionality. 
+
+Standard CRUD, of course meaning Create, Replace, Update, and Delete are all functions that every table is going to have at its disposal, 
+and therefore that'll be the pattern of reusability that every repository is going to take benefit from; and provide these CRUD operations 
+out of the box.
+
+Then there's a pattern around it to extend it, because obviously any repository class should also have the capability of performing 
+more data operations on that table than just the standard CRUD operations.
+
+// TO BE DISCUSSED LATER  IIdentifiableEntity
+IIdentifiableEntity interface will be also used, because every repository is meant to act upon an entity that implements this interface. 
+This is how we are achieving the reusability. 
+
+The CRUD operations that are going to be common to every repository they'll have an interface where they come from
+but any custom methods that we add to a repository that vary from repository to repository will also come from its own interface.
+
+Making every repository interface driven means that I can export it through MEF (Managed Extensibility Framework) and make it subject to
+dependency injection so that the proper repositories can be injected into the classes that will use them later on. 
+
+
+Example:
+
+The methods in the ProductRepository is going to be broken up into two sets. There's going to be the common CRUD set that's going to be common to every repository class, 
+and then there's going to be the custom methods. 
+
+All of them are going to come from the IProductRepository interface, who will define the custom operations, because the common ones come from a framework interface 
+called the IDataRepository of T, in this case T being Product.
+
+// TO BE DISCUSSED LATER  IIdentifiableEntity
+The only generic constraint behind it is an entity that implements IIdentifiableEntity and that's why that interface is important.
+
+The repository class also inherits from a class that's going to give it the overridable methods to perform the CRUD operations, 
+and to fill in the blanks where there are differences from repository to repository. 
+
+This base class is going to be called DataRepositoryBase of T, or in this case, base of Product.
+
+And this class actually inherits from a framework base class (Core.Common), which we could've inherited directly from, 
+so we could've made the ProductRepository inherit directly from DataRepositoryBase of Product and WowDbContext, 
+but because we're going to be using all the data repositories in this particular project against the WowDbContext, 
+we have put a shortcut base class; in that project; called DataRepositoryBase of T, which is the first DataRepositoryBase.
+
+All that is just a shortcut so that we don't have to constantly repeat the WowDbContext argument.
+
+╔═══════════════════════════════════════════════╗
+║ CRUD implementation in the Product Repository ║
+╚═══════════════════════════════════════════════╝
+IDataRepository of T it's actually quite simple. It's an IDataRepository of T, where the T generic argument has a constrain on it, 
+and can only be used with entities that implement the IIdentifiableEntity. 
+	
+	public interface IDataRepository
+    {
+
+    }
+
+    public interface IDataRepository<T> : IDataRepository
+        where T : class, IIdentifiableEntity, new()
+    {
+
+
+╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+  That's the whole reason for having IIdentifiableEntity because let's us tell the entity which one of its properties is its ID.
+
+  Any class that derives from my DataRepository of T, and acts upon T, will know which one of the properties in the T entity will be the identifier. 
+  (eg. ProductID)
+╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+The IDataRepository of T is where we declare the CRUD operations that are going to be common to every single repository class, 
+whether it's going to be the ProductRepository or any future one. 
+
+And very simply, we have an Add, two Removes, an Update, and a couple of Gets. 
+
+
+  public interface IDataRepository<T> : IDataRepository
+        where T : class, IIdentifiableEntity, new()
+    {
+        T Add(T entity);
+
+        void Remove(T entity);
+
+        void Remove(int id);
+
+        T Update(T entity);
+
+        IEnumerable<T> Get();
+
+        T Get(int id);
+    }
+
+The Add obviously is going to be for an insertion, and the Update for a replacement, and you can see that T is used throughout here. 
+And then we have two Removes, one of them so you can Remove if you have the identifier, the other one you can Remove if you happen to have the entity. 
+We could've done that for the others as well; decided to do it only for the Remove. 
+Also we have two Gets one that receives a single entity, and one that receives a collection of them. 
+
+This additional interface here public interface IDataRepository (which is on top of  public interface IDataRepository<T> : IDataRepository  where T : class, IIdentifiableEntity, new())
+is an interface that has a generic argument, as good practice we can always inherit from an interface of the same name without the generic argument, even if it doesn't have any members.
+
+public interface IDataRepository
+{
+
+}
+
+So, what exactly inherits from the IDataRepository of T?
+---------------------------------------------------------
+In the Core.Common.Contracts because we keep all of the interfaces in their own project we have this DataRepositoryBase class. 
+DataRepositoryBase class takes two generic arguments. The first one is once again T, being a constrain of IIdentifiableEntity. 
+
+The other one is what DbContext am I going to work against WowContext. 
+
+Nottice that this base class inherits from IDataRepository of T and knowing that T is an entity, and also knowing that U is a DbContext (WowContext), 
+we can now write overridable, or abstract methods that the data repository will then override and implement on its own. 
+
+The idea was to write a data repository that basically fill in the blanks giving the developer the least amount of work to do to write the code that is going 
+to differ from one repository to another. 
+
+So in this case, the public methods that are going to be exposed by the data repository, the actual Add, the Remove, the Update, 
+are going to take care of all of the common code instantiating the entityContext, doing a SaveChanges, returning an entity, doing another SaveChanges in Remove, doing an Update. 
+
+
+ public abstract class DataRepositoryBase<T, U> : IDataRepository<T>
+         where T : class, IIdentifiableEntity, new()
+         where U : DbContext, new()
+    {
+        protected abstract T AddEntity(U entityContext, T entity);
+
+        protected abstract T UpdateEntity(U entityContext, T entity);
+
+        protected abstract IEnumerable<T> GetEntities(U entityContext);
+
+        protected abstract T GetEntity(U entityContext, int id);
+
+        public T Add(T entity)
+        {
+            using (U entityContext = new U())
+            {
+                T addedEntity = AddEntity(entityContext, entity);
+                entityContext.SaveChanges();
+                return addedEntity;
+            }
+        }
+
+        public void Remove(T entity)
+        {
+            using (U entityContext = new U())
+            {
+                entityContext.Entry<T>(entity).State = EntityState.Deleted;
+                entityContext.SaveChanges();
+            }
+        }
+
+        public void Remove(int id)
+        {
+            using (U entityContext = new U())
+            {
+                T entity = GetEntity(entityContext, id);
+                entityContext.Entry<T>(entity).State = EntityState.Deleted;
+                entityContext.SaveChanges();
+            }
+        }
+
+        public T Update(T entity)
+        {
+            using (U entityContext = new U())
+            {
+                T existingEntity = UpdateEntity(entityContext, entity);
+
+                SimpleMapper.PropertyMap(entity, existingEntity);
+
+                entityContext.SaveChanges();
+                return existingEntity;
+            }
+        }
+
+        public IEnumerable<T> Get()
+        {
+            using (U entityContext = new U())
+                return (GetEntities(entityContext)).ToArray().ToList();
+        }
+
+        public T Get(int id)
+        {
+            using (U entityContext = new U())
+                return GetEntity(entityContext, id);
+        }
+    }
+
+╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+  NOTE: We're using a simple property mapper (eg. SimpleMapper.PropertyMap(entity, existingEntity); that has been taken to perform mapping from one object to another. 
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+
+There's a little piece inside each of these methods that is what's going to vary from repository to repository, and that piece is the actual LINQ query
+
+  T addedEntity = AddEntity(entityContext, entity);
+
+eg. making a call to AddEntity, AddEntity being an abstract method. 
+
+This is what the repository class is going to override and fill in the blanks with the LINQ query. 
+
+The repository class that we're going to write are very simple and they'll have just to override these four methods, fill in the blanks 
+with its own LINQ query, and all of this code is going to take care of everything else behind the scenes. 
+
+╔═══════════════════════╗
+  CRUD Implementation
+╚═══════════════════════╝
+
+We have the ProductRepository and the naming convention chosen is just the name of the table to which this repository will apply, 
+followed by the word Repository. 
+
+But because this repository implies that it is assigned to a particular table, does not mean that we can't break the rules, and use a query, 
+or write a LINQ query that is going to retrieve data from another table. 
+
+We can certainly do that. The repository is the only logical grouping of methods that apply to that table, or at least using one particular table as the primary table. 
+So we may very well end up with a query later that does a join with two or three tables. 
+
+It's safe to assume that in every query there is always one primary table that kind of the main table, at least logically, 
+and that's what these repositories are meant to encapsulate. 
+
+ProductRepository inherits from the DataRepositoryBase class described earlier. We don't need to implement the IDataRepository interface from this class 
+because the DataRepositoryBase class already does that for us. 
+
+ProductRepository class inherits from a DataRepositoryBase of T only, not of (T, U). 
+ 
+public class ProductRepository : DataRepositoryBase<Product>, IProductRepository
+
+Instead of all the repositories having to constantly tell the base class that it's going to use the WowContext, since they all do, 
+we just gave ourselves another class to take care of that for us.
+
+This DataRepositoryBase class is inside my HN.Wow.Data project. It belongs to this data access layer project, whereas the other DataRepositoryBase class 
+is part of the common framework. Core.Common
+
+We send T to the core framework base class, and then we send the type of the DbContext, which is going to be WowContext. 
+
+ public abstract class DataRepositoryBase<T> : DataRepositoryBase<T, WowContext>
+       where T : class, IIdentifiableEntity, new()
+ {
+ }
+
+- We'll give it a constraint to make sure that it's not used improperly. And this constraint's going to be important, especially with the "new()"
+because this is what's going to allow the base class to actually instantiate the DbContext class. 
+
+- We can implement the DataRepositoryBase class in the ProductRepository, which was an abstract class.  
+
+- And we'll implement the overridable methods as defined all the in the core framework class DataRepositoryBase. 
+
+All we have to do here is to fill the blanks; notice that we don't have to instantiate WowContext; it comes into the argument
+
+public abstract class DataRepositoryBase<T> : DataRepositoryBase<T, WowContext>
+
+Example:
+
+AddEntity is being used by the public Add method, which takes care of instantiating the entityContext. 
+ 
+ 
+All we got to do is fill in the query that's going to take care of the addition of an entity in the context of a Product entity, 
+and that's where it's going to vary from query to query. 
+ 
+So, in the case of the ProductRepository, the AddEntity will simply look like this. 
+
+protected override Product AddEntity(WowContext entityContext, Product entity)
+{
+      return entityContext.ProductSet.Add(entity);
+}
+
+Because the AddEntity method gives me the entityContext, and it gives me the entity itself, all I have to do is add it to the ProductSet, and this is 
+standard Entity Framework syntax, and return it.
+
+And as you can see, it's a LINQ to Entity statement, it's a LINQ query, but it's working specifically on the ProductSet, and with ProductId.
+
+
+ So generally speaking the Respositories are going to inherit from DataRepositoryBase of its appropriate entity, and then implement the five overloads, 
+ or overrides with its own LINQ to Entities query that applies to that specific Set property, as defined in my DbContext class (WowContext). 
+ 
+╔════════════════════════════════════════╗
+║  Repository and Dependency Injection   ║
+╚════════════════════════════════════════╝  
+
+ Repository classes are going to be subject to dependency injection, and they can't do that if they don't have an appropriate interface from which they inherit.
+
+In order for the ProductRepository class to be used in dependency injection, or to be used by MEF, it needs to be exported and associated with an interface type. 
+
+So what I need to do is give it an interface from which to inherit, and that interface needs to define the entire public interface of the ProductRepository. 
+
+[Export(typeof(IProductRepository))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public class ProductRepository : DataRepositoryBase<Product>, IProductRepository
+
+
+Now the ProductRepository does not have a public interface per se when you look at it this way, but if you look at the base class from where it inherits DataRepositoryBase, 
+which takes us to here 
+
+public interface IProductRepository : IDataRepository<Product>
+    	
+and in turn takes us to here
+ public interface IDataRepository<T> : IDataRepository
+        where T : class, IIdentifiableEntity, new()
+    {
+
+here we certainly do have a public interface. We have an Add, a Remove, Remove, Update. These methods came from the IDataRepository interface.
+
+ public interface IDataRepository<T> : IDataRepository
+        where T : class, IIdentifiableEntity, new()
+    {
+        T Add(T entity);
+
+        void Remove(T entity);
+
+        void Remove(int id);
+
+        T Update(T entity);
+
+        IEnumerable<T> Get();
+
+        T Get(int id);
+    }
+
+So ultimately those CRUD operations in their public form are available to us from the IDataRepository of T. 
+
+╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║ NOTE: WE can't inherit this class from IDataRepository of T, and then use that to export it, because MEF doesn't let us export with a generic argument ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  
+
+But that's not the only reason we want our own interface. The other reason is because we don't want to limit this repository to just these operations. 
+What if we wanted to add another operation ? 
+
+What if I wanted to add an operation called GetByProductNamed, which means we want to retrieve a product from the table not given an ID, an integer ID, 
+but actually given a Name (productName).
+
+We can add our own public method and this method is going to return a Product entity, it will be called GetByProductName and it's simply instantiating the Entity Framework context on its own, 
+performing a query and returning some result; and this query can be as simple, or as complex as you allow it to get.
+ 
+The repository interface serves as the base interface for this respository class. And that interface resides in  HN.Data.Contracts project in the repository interface's folder, IProductRepository. 
+
+public interface IProductRepository : IDataRepository<Product>
+{
+        Product GetByProductName(string productName);
+}
+
+We give these interfaces the same name as the repository class they represent. 
+
+This interface needs to define the public members of the ProductRepository, but we've given the ProductRepository one public method GetByProductName, 
+and the other six methods come from the base class. 
+
+So this interface can inherit from the IDataRepository of Product effectively defining the public members from that base interface. 
+
+Now the IProductRepository interface defines the Add, Get, Remove, all of those public members that the ProductRepository interface is going to use. 
+The one member that it does not define yet is that extra one that we gave it GetByProductName.
+
+We can now implement in the ProductRepository this IProductRepository interface including the custom method.
+
+We have NOW an interface that we can use for dependency injection here. 
+And if you've used MEF before, you know that by default MEF will use a singleton pattern to resolve types, so you got to tell it specifically not to use a singleton pattern as follows 
+
+[PartCreationPolicy(CreationPolicy.NonShared)]
+
+When we create the dependency injection container, MEF is going to find this ProductRepository class associated with the IProductRepository. 
+
+We can simply inject IProductRepository instances into any of the client classes, and MEF is going to know what class to instantiate. "That's standard dependency injection usage".
+ 
+
+
 
 The entities will be on the client side and on the server side. 
 
@@ -82,6 +451,16 @@ The HOW TO Process
 	╚═══════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
+
+	Converstaion about Soft delete
+  ╚═════════════════════════════════╝
+
+  introduce a column bool IsDeleted; and an attribute to a Poco class 
+  [SoftDelete("isDeleted")]
+
+  Command tree to intercept the query. Before sent to the provider to translate into SQL WE SPECIFY ADDITIOINAL FILTERS and change it into an update
+
+  We create an Attibute for SoftDelete, called SoftDeleteAttribute
 
 
 

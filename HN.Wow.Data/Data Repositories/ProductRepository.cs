@@ -42,5 +42,21 @@ namespace HN.Wow.Data
 
             return results;
         }
+
+        /// <summary>
+        /// Custom 
+        /// </summary>
+        /// <param name="productName"></param>
+        /// <returns></returns>
+        public Product GetByProductName(string productName)
+        {
+            using (WowContext entityContext = new WowContext())
+            {
+                return (from p in entityContext.ProductSet
+                        where p.ProductName == productName
+                        select p).FirstOrDefault();
+            }
+        }
+       
     }
 }
