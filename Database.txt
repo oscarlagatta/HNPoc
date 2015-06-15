@@ -71,10 +71,10 @@ and can only be used with entities that implement the IIdentifiableEntity.
 
 
 ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
-  That's the whole reason for having IIdentifiableEntity because let's us tell the entity which one of its properties is its ID.
-
-  Any class that derives from my DataRepository of T, and acts upon T, will know which one of the properties in the T entity will be the identifier. 
-  (eg. ProductID)
+║  That's the whole reason for having IIdentifiableEntity because let's us tell the entity which one of its properties is its ID.                   ║ 
+║																																					║
+║  Any class that derives from my DataRepository of T, and acts upon T, will know which one of the properties in the T entity will be the identifier║ 
+║  (eg. ProductID)                                                                                                                                  ║
 ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 The IDataRepository of T is where we declare the CRUD operations that are going to be common to every single repository class, 
@@ -197,7 +197,7 @@ are going to take care of all of the common code instantiating the entityContext
     }
 
 ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
-  NOTE: We're using a simple property mapper (eg. SimpleMapper.PropertyMap(entity, existingEntity); that has been taken to perform mapping from one object to another. 
+║ NOTE: We're using a simple property mapper (eg. SimpleMapper.PropertyMap(entity, existingEntity); that has been taken to perform mapping from one object to another.   ║
 ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 There's a little piece inside each of these methods that is what's going to vary from repository to repository, and that piece is the actual LINQ query
@@ -212,7 +212,7 @@ The repository class that we're going to write are very simple and they'll have 
 with its own LINQ query, and all of this code is going to take care of everything else behind the scenes. 
 
 ╔═══════════════════════╗
-  CRUD Implementation
+║  CRUD Implementation  ║
 ╚═══════════════════════╝
 
 We have the ProductRepository and the naming convention chosen is just the name of the table to which this repository will apply, 
@@ -368,8 +368,12 @@ When we create the dependency injection container, MEF is going to find this Pro
 
 We can simply inject IProductRepository instances into any of the client classes, and MEF is going to know what class to instantiate. "That's standard dependency injection usage".
  
+ 
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+CLIENT - SERVER Architecture.
+-----------------------------
 
 The entities will be on the client side and on the server side. 
 
