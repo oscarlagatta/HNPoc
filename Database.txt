@@ -24,39 +24,41 @@ more data operations on that table than just the standard CRUD operations.
 IIdentifiableEntity interface will be also used, because every repository is meant to act upon an entity that implements this interface. 
 This is how we are achieving the reusability. 
 
-The CRUD operations that are going to be common to every repository they'll have an interface where they come from
-but any custom methods that we add to a repository that vary from repository to repository will also come from its own interface.
+The CRUD operations that are going to be common to every repository; they'll have an interface where they come from
+but any custom methods that we add to a repository that vary from repository to repository will also come from "its own interface".
 
-Making every repository interface driven means that I can export it through MEF (Managed Extensibility Framework) and make it subject to
-dependency injection so that the proper repositories can be injected into the classes that will use them later on. 
+Making every repository interface driven means that we can export it through MEF (Managed Extensibility Framework - Dependency injection)
+and make it subject to dependency injection so that the proper repositories can be injected into the classes that will use them later on. 
 
 
 Example:
 
-The methods in the ProductRepository is going to be broken up into two sets. There's going to be the common CRUD set that's going to be common to every repository class, 
-and then there's going to be the custom methods. 
+The methods in the ProductRepository are going to be broken up into two sets. 
+1.- There's going to be the common CRUD set that's common to every repository class
+2.- The custom methods
 
-All of them are going to come from the IProductRepository interface, who will define the custom operations, because the common ones come from a framework interface 
-called the IDataRepository of T, in this case T being Product.
+All of them are going to come from the "IProductRepository" interface, who will define the custom operations, because the common ones 
+come from a framework interface called the "IDataRepository" of T, in this case T being Product.
 
 // TO BE DISCUSSED LATER  IIdentifiableEntity
-The only generic constraint behind it is an entity that implements IIdentifiableEntity and that's why that interface is important.
+The only generic constraint behind it is an entity that implements IIdentifiableEntity.
 
 The repository class also inherits from a class that's going to give it the overridable methods to perform the CRUD operations, 
 and to fill in the blanks where there are differences from repository to repository. 
 
-This base class is going to be called DataRepositoryBase of T, or in this case, base of Product.
+This base class is going to be called "DataRepositoryBase" of T, or in this case, T of Product.
 
-And this class actually inherits from a framework base class (Core.Common), which we could've inherited directly from, 
+And this class actually inherits from a Core.Common framework base class, which we could've inherited directly from, 
 so we could've made the ProductRepository inherit directly from DataRepositoryBase of Product and WowDbContext, 
 but because we're going to be using all the data repositories in this particular project against the WowDbContext, 
-we have put a shortcut base class; in that project; called DataRepositoryBase of T, which is the first DataRepositoryBase.
+we have put a shortcut base class; in that project; called "DataRepositoryBase" of T, which is the first DataRepositoryBase.
 
-All that is just a shortcut so that we don't have to constantly repeat the WowDbContext argument.
+All that is just a shortcut so that we don't have to constantly repeat the WowContext (Entity Framework) argument.
 
 ╔═══════════════════════════════════════════════╗
 ║ CRUD implementation in the Product Repository ║
 ╚═══════════════════════════════════════════════╝
+
 IDataRepository of T it's actually quite simple. It's an IDataRepository of T, where the T generic argument has a constrain on it, 
 and can only be used with entities that implement the IIdentifiableEntity. 
 	
@@ -70,18 +72,16 @@ and can only be used with entities that implement the IIdentifiableEntity.
     {
 
 
-╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
-║  That's the whole reason for having IIdentifiableEntity because let's us tell the entity which one of its properties is its ID.                   ║ 
-║																																					║
-║  Any class that derives from my DataRepository of T, and acts upon T, will know which one of the properties in the T entity will be the identifier║ 
-║  (eg. ProductID)                                                                                                                                  ║
-╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║  That's the whole reason for having IIdentifiableEntity because let's us tell the entity which one of its properties is its ID.                    ║ 
+║  Any class that derives from the DataRepository of T, and acts upon T, will know which one of the properties in the T entity will be the identifier║ 
+║  (eg. ProductID)                                                                                                                                   ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
 
 The IDataRepository of T is where we declare the CRUD operations that are going to be common to every single repository class, 
 whether it's going to be the ProductRepository or any future one. 
 
-And very simply, we have an Add, two Removes, an Update, and a couple of Gets. 
-
+And very simply below, we have an Add, two Removes, an Update, and a couple of Gets. 
 
   public interface IDataRepository<T> : IDataRepository
         where T : class, IIdentifiableEntity, new()
@@ -100,12 +100,23 @@ And very simply, we have an Add, two Removes, an Update, and a couple of Gets.
     }
 
 The Add obviously is going to be for an insertion, and the Update for a replacement, and you can see that T is used throughout here. 
-And then we have two Removes, one of them so you can Remove if you have the identifier, the other one you can Remove if you happen to have the entity. 
+We have two Removes, one of them so you can Remove if you have the (ID) identifier, the other one you can Remove if you happen to have the entity. 
 We could've done that for the others as well; decided to do it only for the Remove. 
+
+        void Remove(T entity);
+
+        void Remove(int id);
+
 Also we have two Gets one that receives a single entity, and one that receives a collection of them. 
 
-This additional interface here public interface IDataRepository (which is on top of  public interface IDataRepository<T> : IDataRepository  where T : class, IIdentifiableEntity, new())
-is an interface that has a generic argument, as good practice we can always inherit from an interface of the same name without the generic argument, even if it doesn't have any members.
+        IEnumerable<T> Get();
+
+        T Get(int id);
+
+There's an additional interface here public interface IDataRepository (which is on top of  public interface
+IDataRepository<T> : IDataRepository  where T : class, IIdentifiableEntity, new())
+is an interface that has a generic argument, as good practice we can always inherit from 
+an interface of the same name without the generic argument, even if it doesn't have any members.
 
 public interface IDataRepository
 {
@@ -114,19 +125,28 @@ public interface IDataRepository
 
 So, what exactly inherits from the IDataRepository of T?
 ---------------------------------------------------------
-In the Core.Common.Contracts because we keep all of the interfaces in their own project we have this DataRepositoryBase class. 
-DataRepositoryBase class takes two generic arguments. The first one is once again T, being a constrain of IIdentifiableEntity. 
 
-The other one is what DbContext am I going to work against WowContext. 
 
-Nottice that this base class inherits from IDataRepository of T and knowing that T is an entity, and also knowing that U is a DbContext (WowContext), 
+public abstract class DataRepositoryBase<T, U> : IDataRepository<T>
+         where T : class, IIdentifiableEntity, new()
+         where U : DbContext, new()
+    {
+
+In the Core.Common.Contracts; because we keep all of the interfaces in their own project we have this "DataRepositoryBase" class. 
+
+"DataRepositoryBase" class takes two generic arguments. The first one is once again T, being a constrain of IIdentifiableEntity. 
+
+The other one is what DbContext going to work against WowContext. 
+
+Notice that this base class inherits from IDataRepository of T and knowing that T is an entity, and also knowing that U is a DbContext (WowContext), 
 we can now write overridable, or abstract methods that the data repository will then override and implement on its own. 
 
 The idea was to write a data repository that basically fill in the blanks giving the developer the least amount of work to do to write the code that is going 
 to differ from one repository to another. 
 
 So in this case, the public methods that are going to be exposed by the data repository, the actual Add, the Remove, the Update, 
-are going to take care of all of the common code instantiating the entityContext, doing a SaveChanges, returning an entity, doing another SaveChanges in Remove, doing an Update. 
+are going to take care of all of the common code instantiating the entityContext, doing a SaveChanges, returning an entity, 
+doing another SaveChanges in Remove, doing an Update. 
 
 
  public abstract class DataRepositoryBase<T, U> : IDataRepository<T>
@@ -208,7 +228,7 @@ eg. making a call to AddEntity, AddEntity being an abstract method.
 
 This is what the repository class is going to override and fill in the blanks with the LINQ query. 
 
-The repository class that we're going to write are very simple and they'll have just to override these four methods, fill in the blanks 
+The repository class that we write are very simple and they'll have just to override these four methods, fill in the blanks 
 with its own LINQ query, and all of this code is going to take care of everything else behind the scenes. 
 
 ╔═══════════════════════╗
