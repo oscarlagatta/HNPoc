@@ -20,10 +20,6 @@ out of the box.
 Then there's a pattern around it to extend it, because obviously any repository class should also have the capability of performing 
 more data operations on that table than just the standard CRUD operations.
 
-// TO BE DISCUSSED LATER  IIdentifiableEntity
-IIdentifiableEntity interface will be also used, because every repository is meant to act upon an entity that implements this interface. 
-This is how we are achieving the reusability. 
-
 The CRUD operations that are going to be common to every repository; they'll have an interface where they come from
 but any custom methods that we add to a repository that vary from repository to repository will also come from "its own interface".
 
@@ -39,9 +35,6 @@ The methods in the ProductRepository are going to be broken up into two sets.
 
 All of them are going to come from the "IProductRepository" interface, who will define the custom operations, because the common ones 
 come from a framework interface called the "IDataRepository" of T, in this case T being Product.
-
-// TO BE DISCUSSED LATER  IIdentifiableEntity
-The only generic constraint behind it is an entity that implements IIdentifiableEntity.
 
 The repository class also inherits from a class that's going to give it the overridable methods to perform the CRUD operations, 
 and to fill in the blanks where there are differences from repository to repository. 
@@ -73,7 +66,7 @@ and can only be used with entities that implement the IIdentifiableEntity.
 
 
 ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
-║  That's the whole reason for having IIdentifiableEntity because let's us tell the entity which one of its properties is its ID.                    ║ 
+║  The reason for having IIdentifiableEntity is because let's us tell the entity which one of its properties is its ID.                              ║ 
 ║  Any class that derives from the DataRepository of T, and acts upon T, will know which one of the properties in the T entity will be the identifier║ 
 ║  (eg. ProductID)                                                                                                                                   ║
 ╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
@@ -260,7 +253,7 @@ we just gave ourselves another class to take care of that for us.
 This DataRepositoryBase class is inside my HN.Wow.Data project. It belongs to this data access layer project, whereas the other DataRepositoryBase class 
 is part of the common framework. Core.Common
 
-We send T to the core framework base class, and then we send the type of the DbContext, which is going to be WowContext. 
+We send T to the core framework base class, and also we send the type of the DbContext, which is going to be WowContext. 
 
  public abstract class DataRepositoryBase<T> : DataRepositoryBase<T, WowContext>
        where T : class, IIdentifiableEntity, new()
@@ -274,7 +267,7 @@ because this is what's going to allow the base class to actually instantiate the
 
 - And we'll implement the overridable methods as defined all the in the core framework class DataRepositoryBase. 
 
-All we have to do here is to fill the blanks; notice that we don't have to instantiate WowContext; it comes into the argument
+All we have to do here is to complete the blanks; notice that we don't have to instantiate WowContext; it comes into the argument
 
 public abstract class DataRepositoryBase<T> : DataRepositoryBase<T, WowContext>
 
@@ -306,9 +299,10 @@ And as you can see, it's a LINQ to Entity statement, it's a LINQ query, but it's
 ║  Repository and Dependency Injection   ║
 ╚════════════════════════════════════════╝  
 
- Repository classes are going to be subject to dependency injection, and they can't do that if they don't have an appropriate interface from which they inherit.
+Repository classes are going to be subject to dependency injection, and they can't do that if they don't have an appropriate interface from which they inherit.
 
-In order for the ProductRepository class to be used in dependency injection, or to be used by MEF, it needs to be exported and associated with an interface type. 
+In order for the ProductRepository class to be used in dependency injection, or to be used by MEF (managed extensibility framework), 
+it needs to be "exported" (Export()) and associated with an interface type. 
 
 So what I need to do is give it an interface from which to inherit, and that interface needs to define the entire public interface of the ProductRepository. 
 
@@ -354,13 +348,15 @@ So ultimately those CRUD operations in their public form are available to us fro
 But that's not the only reason we want our own interface. The other reason is because we don't want to limit this repository to just these operations. 
 What if we wanted to add another operation ? 
 
-What if I wanted to add an operation called GetByProductNamed, which means we want to retrieve a product from the table not given an ID, an integer ID, 
+What if I wanted to add an operation called GetByProductName, which means we want to retrieve a product from the table not given an ID, an integer ID, 
 but actually given a Name (productName).
 
-We can add our own public method and this method is going to return a Product entity, it will be called GetByProductName and it's simply instantiating the Entity Framework context on its own, 
+We can add our own public method and this method is going to return a Product entity, it will be called 
+GetByProductName and it's simply instantiating the Entity Framework context on its own, 
 performing a query and returning some result; and this query can be as simple, or as complex as you allow it to get.
  
-The repository interface serves as the base interface for this respository class. And that interface resides in  HN.Data.Contracts project in the repository interface's folder, IProductRepository. 
+The repository interface serves as the base interface for this respository class.
+And that interface resides in HN.Data.Contracts project in the repository interface's folder, IProductRepository. 
 
 public interface IProductRepository : IDataRepository<Product>
 {
@@ -380,13 +376,17 @@ The one member that it does not define yet is that extra one that we gave it Get
 We can now implement in the ProductRepository this IProductRepository interface including the custom method.
 
 We have NOW an interface that we can use for dependency injection here. 
-And if you've used MEF before, you know that by default MEF will use a singleton pattern to resolve types, so you got to tell it specifically not to use a singleton pattern as follows 
+
+And if you've used MEF before, you know that by default MEF will use a singleton pattern to resolve types (meaning one single instance of the class), 
+so you got to tell it specifically not to use a singleton pattern as follows 
 
 [PartCreationPolicy(CreationPolicy.NonShared)]
 
 When we create the dependency injection container, MEF is going to find this ProductRepository class associated with the IProductRepository. 
 
-We can simply inject IProductRepository instances into any of the client classes, and MEF is going to know what class to instantiate. "That's standard dependency injection usage".
+We can simply inject IProductRepository instances into any of the client classes, and MEF is going to know what class to instantiate. 
+
+"That's standard dependency injection usage".
  
  
 
