@@ -3,6 +3,7 @@ using System.Linq;
 using Core.Common.Contracts;
 using Core.Common.Utils;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 
 namespace Core.Common.Data
 {
@@ -51,12 +52,20 @@ namespace Core.Common.Data
         {
             using (U entityContext = new U())
             {
-                T existingEntity = UpdateEntity(entityContext, entity);
+                try
+                {
+                    T existingEntity = UpdateEntity(entityContext, entity);
 
-                SimpleMapper.PropertyMap(entity, existingEntity);
+                    SimpleMapper.PropertyMap(entity, existingEntity);
 
-                entityContext.SaveChanges();
-                return existingEntity;
+                    entityContext.SaveChanges();
+                    return existingEntity;
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    
+                    throw;
+                }
             }
         }
 
