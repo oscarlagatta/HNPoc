@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{7B373437
 		AppDesign.jpg = AppDesign.jpg
 		AppDesign2.jpg = AppDesign2.jpg
 		AppDesign3.jpg = AppDesign3.jpg
+		BootstrapTemplates.txt = BootstrapTemplates.txt
 		Database.txt = Database.txt
 		EntityFramework6.txt = EntityFramework6.txt
 		EntityFramework7.txt = EntityFramework7.txt
