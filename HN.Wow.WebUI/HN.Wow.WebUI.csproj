@@ -113,9 +113,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BootswatchSamplesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PagerSamplesController.cs" />
+    <Compile Include="Controllers\TableSamplesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProductViewModel1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -170,10 +173,10 @@
     <Content Include="Views\BootswatchSamples\FlatlySample.cshtml" />
     <Content Include="Views\BootswatchSamples\SandStoneSample.cshtml" />
     <Content Include="Views\BootswatchSamples\LumenSample.cshtml" />
+    <Content Include="Views\TableSamples\Table01.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -181,6 +184,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SamplesData\SamplesData.csproj">
+      <Project>{06c70b62-47d3-4388-a317-13897dd78641}</Project>
+      <Name>SamplesData</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

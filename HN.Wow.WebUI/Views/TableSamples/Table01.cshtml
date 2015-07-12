@@ -1,0 +1,49 @@
+﻿@model SamplesData.ProductViewModel1
+
+@{
+  ViewBag.Title = "Table Sample 1 - Loading";
+}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="table-responsive">
+      <table class="table table-condensed table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <th>
+              Product Name
+            </th>
+            <th>
+              Introduction Date
+            </th>
+            <th>
+              Cost
+            </th>
+            <th>
+              Price
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (SamplesData.Product item in Model.Products)
+          {
+            <tr>
+              <td>
+                @item.ProductName
+              </td>
+              <td>
+                @item.IntroductionDate.ToShortDateString()
+              </td>
+              <td>
+                @item.Cost.ToString("c")
+              </td>
+              <td>
+                @item.Price.ToString("c")
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
