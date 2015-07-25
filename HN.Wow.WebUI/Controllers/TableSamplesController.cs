@@ -64,6 +64,8 @@ namespace HN.Wow.WebUI.Controllers
       return View(vm);
     }
 
+
+
     //*********************************************************
     // Server-Side Paging
     public ActionResult Table04()

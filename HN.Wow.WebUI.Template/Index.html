@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en-gb">
+<head>
+    <title>CSS Positioning</title>
+    <link href="Content/site.css" rel="stylesheet" type="text/css" />
+	<meta charset="utf-8" />
+</head>
+<body>
+    
+    <div class="mycontainer">
+        <div class="box blueBox"></div>
+    </div>
+    <!--<div class="box greenBox"></div>-->
+    
+    <h1><em>Fixed positioning</em> &rsquo;fixes&lsquo; the position of an element relative to the browser window. The element always stays fixed in place, even when scrolling.</h1>
+    <h1><em>Absolute positioning</em>
+    takes an element out of the document flow, meaning the browser acts as if the 
+    element has no width and height, and the other elements on the page move up as
+    if it was never there. The position of the element is then fixed relative to the 
+    top level container, or the closest parent with a set positioning.</h1>
+    <h1>
+        <em>Relative positioning</em>
+        sets the position of an element relative to its original position.
+        The element's original width and height is retained in document flow and other elements
+        behave as if it was in its original position.
+    </h1>
+    <h1>
+        <em>Static positioning</em>
+        is the default behavior of elements. <em>Inherited positioning</em> tells an element
+        to inherit its positioning from its parent element. <em>Z-index</em> controls the vertical
+        stacking order of elements. Elements must have a set positioning for z-index to work.
+    </h1>
+    <h1>
+        <em>Floating left</em>
+        removes an element from normal document flow. It then takes that element and pushes it to the far left 
+        as possible. Other elements will move up as far as possible to flow around the element and take its
+        original space.
+    </h1>
+    <h1>
+        <em>Floating right</em>
+        removes an element from normal document flow. It then takes that element and pushes it to the far right
+        as possible. Other elements will move up as far as possible to flow around the element and take its
+        original space.
+    </h1>
+    <h1>
+        
+        One of the most commonly asked questions is how to <em>center elements</em> since there is no option to 
+        float center. But by thinking carefully about how elements behave, we can use positioning to achieve the
+        same result.
+    </h1>
+</body>
+</html>
