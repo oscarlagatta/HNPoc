@@ -10,7 +10,14 @@ namespace HN.Wow.WebUI.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            HN.MenuManagement.HNMenuItemManager mgr;
+            HN.MenuManagement.HNMenuMock injector =
+                new HN.MenuManagement.HNMenuMock();
+            mgr = new HN.MenuManagement.HNMenuItemManager(injector);
+
+            mgr.Load();
+
+            return View(mgr);
         }
 
         public ActionResult About()

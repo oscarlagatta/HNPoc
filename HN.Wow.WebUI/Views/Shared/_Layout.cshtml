@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model HN.MenuManagement.HNMenuItemManager
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -8,25 +10,44 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse navbar-fixed-top"
+         role="navigation">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <a href="/Home/Index" class="navbar-brand">
+                    Home
+                </a>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-            </div>
+            <ul class="nav navbar-nav">
+                @foreach (HN.MenuManagement.HNMenuItem item in Model.Menus)
+                {
+                    <li>
+                        @if (item.Menus.Count > 0)
+                        {
+                            <a href="@item.MenuAction"
+                               class="dropdown-toggle"
+                               data-toggle="dropdown">
+                                @item.MenuTitle&nbsp;
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                @foreach (HN.MenuManagement.HNMenuItem subItem in item.Menus)
+                                {
+                                    <li>
+                                        <a href="@subItem.MenuAction">@subItem.MenuTitle</a>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <a href="@item.MenuAction">@item.MenuTitle</a>
+                        }
+                    </li>
+                }
+            </ul>
         </div>
-    </div>
+    </nav>
     <div class="container body-content">
         @RenderBody()
         <hr />

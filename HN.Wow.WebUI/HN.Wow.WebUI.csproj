@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -111,6 +112,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Components\HNMenuItem.cs" />
+    <Compile Include="Components\HNMenuItemManager.cs" />
     <Compile Include="Controllers\BootswatchSamplesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PagerSamplesController.cs" />
@@ -186,6 +189,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HN.MenuManagement\HN.MenuManagement.csproj">
+      <Project>{4cf19f0f-adee-48f7-b9e4-61cb8b9ce662}</Project>
+      <Name>HN.MenuManagement</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SamplesData\SamplesData.csproj">
       <Project>{06c70b62-47d3-4388-a317-13897dd78641}</Project>
       <Name>SamplesData</Name>
