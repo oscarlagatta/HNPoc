@@ -1,0 +1,118 @@
+﻿/* ************************************** */
+/* BEGIN: PDSA Summary Block Color Themes */
+/* ************************************** */
+.hn-summary-block-primary {
+  color: #fff;
+  background-color: #428bca;
+}
+
+  .hn-summary-block-primary .summary-footer {
+    background-color: deepskyblue;
+  }
+
+    .hn-summary-block-primary .summary-footer a {
+      color: white;
+    }
+
+.hn-summary-block-success {
+  color: #fff;
+  background-color: #3c763d;
+}
+
+  .hn-summary-block-success .summary-footer {
+    background-color: green;
+  }
+
+    .hn-summary-block-success .summary-footer a {
+      color: white;
+    }
+
+.hn-summary-block-danger {
+  color: #fff;
+  background-color: #a94442;
+}
+
+  .hn-summary-block-danger .summary-footer {
+    background-color: red;
+  }
+
+    .hn-summary-block-danger .summary-footer a {
+      color: white;
+    }
+
+.hn-summary-block-info {
+  color: #fff;
+  background-color: #31708f;
+}
+
+  .hn-summary-block-info .summary-footer {
+    background-color: teal;
+  }
+
+    .hn-summary-block-info .summary-footer a {
+      color: white;
+    }
+/* ************************************ */
+/* END: HN Summary Block Color Themes */
+/* ************************************ */
+
+/* **************************************************** */
+/* BEGIN: Summary Block Display                         */
+/* The following styles are for a summary block display */
+/* **************************************************** */
+
+.hn-summary-block {
+  position: relative;
+  width: 100%;
+  margin: 0.3em;
+  padding: 1em;
+  min-height: 15em;
+}
+
+  .hn-summary-block .summary-background i,
+  .hn-summary-block .summary-background div {
+    margin-left: -0.4em;
+    margin-top: 0.1em;
+    font-size: 8em;
+    opacity: 0.3;
+  }
+
+  .hn-summary-block .summary-body {
+    position: absolute;
+    top: 1.3em;
+    right: 0.8em;
+  }
+
+    .hn-summary-block .summary-body .summary-line1 {
+      text-align: right;
+      font-size: xx-large;
+    }
+
+    .hn-summary-block .summary-body .summary-line2 {
+      text-align: right;
+      font-size: medium;
+    }
+
+  .hn-summary-block .summary-footer {
+    position: absolute;
+    bottom: 0em;
+    right: 0em;
+    width: 100%;
+    padding: 0.4em;
+    font-weight: 300;
+    text-transform: uppercase;
+    font-size: small;
+    opacity: 0.75;
+  }
+
+    .hn-summary-block .summary-footer a {
+      text-decoration: none;
+    }
+
+    .hn-summary-block .summary-footer:hover {
+      opacity: 1;
+      cursor: pointer;
+    }
+/* *************************** */
+/* END: Summary Block Display  */
+/* *************************** */
